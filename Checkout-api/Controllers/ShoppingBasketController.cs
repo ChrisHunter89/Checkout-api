@@ -24,8 +24,6 @@ namespace Checkout_api.Controllers
             return Ok(_checkoutService.GetAvailableItems());
         }
 
-
-
         [HttpPost]
         [Route("Checkout")]
         public IActionResult Post([FromBody]Basket basket)

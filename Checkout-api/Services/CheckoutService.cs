@@ -13,14 +13,13 @@ namespace Checkout_api.Services
         };
 
         private Basket basket { get; set; }
-
         public CheckoutService()
         {
         }
 
         public List<Item> GetAvailableItems()
         {
-            throw new NotImplementedException();
+            return availableItems;
         }
 
         public Basket CalculateBasket()
