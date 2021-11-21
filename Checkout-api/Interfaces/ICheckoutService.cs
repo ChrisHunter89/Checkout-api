@@ -5,6 +5,6 @@ namespace Checkout_api.Interfaces
     public interface ICheckoutService
     {
         List<Item> GetAvailableItems();
-        Basket CalculateBasket();
+        Basket CalculateBasket(Basket basket);
     }
 }
