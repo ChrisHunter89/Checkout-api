@@ -13,15 +13,11 @@ namespace Checkout_api.UnitTests
         private readonly ShoppingBasketController shoppingBasketController;
         private readonly ICheckoutService _checkoutService;
 
-        private static Item itemA = new Item { Name = "A", UnitPrice = 10 };
-        private static Item itemB = new Item { Name = "B", UnitPrice = 15 };
-        private static Item itemC = new Item { Name = "C", UnitPrice = 40 };
-        private static Item itemD = new Item { Name = "D", UnitPrice = 55 };
+        private static Item itemA = new Item { Name = "A" };
+        private static Item itemB = new Item { Name = "B" };
+        private static Item itemC = new Item { Name = "C" };
+        private static Item itemD = new Item { Name = "D" };
 
-        private readonly Basket singleItemBasket = new Basket
-        {
-            Items = new List<Item> { itemA }
-        };
 
         public ShoppingBasketTests()
         {
@@ -53,22 +49,45 @@ namespace Checkout_api.UnitTests
         [Fact]
         public void Checkout_WithValidItems_ReturnOkActionResult()
         {
+            // Arrange
+            itemA.QunatityRequired = 1;
+            Basket basket = new Basket { Items = new List<Item> { itemA } };
+
             // Act
-            var result = shoppingBasketController.CheckoutItems(singleItemBasket) as OkObjectResult;
+            var result = shoppingBasketController.CheckoutItems(basket) as OkObjectResult;
 
             // Assert
             Assert.IsType<OkObjectResult>(result as OkObjectResult);
         }
 
         [Fact]
-        public void Checkout_WithSingleItem_BasketTotalOf10()
+        public void Checkout_WithSingleItemA_BasketTotalOf10()
         {
+            // Arrange
+            itemA.QunatityRequired = 1;
+            Basket basket = new Basket { Items = new List<Item> { itemA } };
+
             // Act
-            var result = shoppingBasketController.CheckoutItems(singleItemBasket) as OkObjectResult;
+            var result = shoppingBasketController.CheckoutItems(basket) as OkObjectResult;
 
             // Assert
-            var basket = Assert.IsType<Basket>(result?.Value);
-            Assert.Equal(10, basket.Total);
+            var resultBasket = Assert.IsType<Basket>(result?.Value);
+            Assert.Equal(10, resultBasket.Total);
+        }
+
+        [Fact]
+        public void Checkout_WithThreeOfItemA_BasketTotalOf30()
+        {
+            // Arrange
+            itemA.QunatityRequired = 3;
+            Basket basket = new Basket { Items = new List<Item> { itemA } };
+
+            // Act
+            var result = shoppingBasketController.CheckoutItems(basket) as OkObjectResult;
+
+            // Assert
+            var resultBasket = Assert.IsType<Basket>(result?.Value);
+            Assert.Equal(30, resultBasket.Total);
         }
     }
 }

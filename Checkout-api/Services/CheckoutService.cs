@@ -19,7 +19,13 @@ namespace Checkout_api.Services
 
         public Basket CalculateBasket(Basket basket)
         {
-            throw new NotImplementedException();
+            foreach (var basketItem in basket.Items)
+            {
+                var unitPrice = Stock.AvailableItems.Where(si => si.Name == basketItem.Name).Select(i => i.UnitPrice).FirstOrDefault();
+                basket.Total += unitPrice * basketItem.QunatityRequired;
+            }
+
+            return basket;
         }
     }
 }
