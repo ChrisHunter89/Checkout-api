@@ -28,9 +28,10 @@ namespace Checkout_api.Controllers
         [Route("Checkout")]
         public IActionResult CheckoutItems([FromBody]Basket basket)
         {
-            if (basket == null) return BadRequest();
-
             var currentBasket = _checkoutService.CalculateBasket(basket);
+
+            if (currentBasket == null) return BadRequest();
+
             return Ok(currentBasket);
         }
     }

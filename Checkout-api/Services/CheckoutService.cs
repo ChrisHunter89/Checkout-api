@@ -19,6 +19,8 @@ namespace Checkout_api.Services
 
         public Basket CalculateBasket(Basket basket)
         {
+            if (basket == null || basket.Items == null) return null;
+
             foreach (var basketItem in basket.Items)
             {
                 var unitPrice = Stock.AvailableItems.Where(si => si.Name == basketItem.Name).Select(i => i.UnitPrice).FirstOrDefault();
