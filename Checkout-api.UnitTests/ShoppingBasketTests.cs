@@ -46,6 +46,7 @@ namespace Checkout_api.UnitTests
             Assert.Equal(4, items.Count);
         }
 
+        #region Single Item Type Tests
         [Fact]
         public void Checkout_WithValidItems_ReturnOkActionResult()
         {
@@ -89,7 +90,9 @@ namespace Checkout_api.UnitTests
             var resultBasket = Assert.IsType<Basket>(result?.Value);
             Assert.Equal(30, resultBasket.Total);
         }
+        #endregion
 
+        #region Multiple Item Types Tests
         [Fact]
         public void Checkout_WithMultipleItems_OkActionResult()
         {
@@ -126,5 +129,48 @@ namespace Checkout_api.UnitTests
             var resultBasket = Assert.IsType<Basket>(result?.Value);
             Assert.Equal(45, resultBasket.Total);
         }
+
+
+        [Fact]
+        public void Checkout_WithTwoOfEachItem_BasketTotalOf45()
+        {
+            // Arrange
+            itemA.QunatityRequired = 2;
+            itemB.QunatityRequired = 2;
+            itemC.QunatityRequired = 2;
+            itemD.QunatityRequired = 2;
+            Basket basket = new Basket
+            {
+                Items = new List<Item> { itemA, itemB, itemC, itemD },
+            };
+
+            // Act
+            var result = shoppingBasketController.CheckoutItems(basket) as OkObjectResult;
+
+            // Assert
+            var resultBasket = Assert.IsType<Basket>(result?.Value);
+            Assert.Equal(240, resultBasket.Total);
+        }
+        #endregion
+
+        #region Promotion Tests
+        [Fact]
+        public void Checkout_With3For40ItemBPromotion_BasketTotalOf40()
+        {
+            // Arrange
+            itemB.QunatityRequired = 3;
+            Basket basket = new Basket
+            {
+                Items = new List<Item> { itemB },
+            };
+
+            // Act
+            var result = shoppingBasketController.CheckoutItems(basket) as OkObjectResult;
+
+            // Assert
+            var resultBasket = Assert.IsType<Basket>(result?.Value);
+            Assert.Equal(40, resultBasket.Total);
+        }
+        #endregion
     }
 }
