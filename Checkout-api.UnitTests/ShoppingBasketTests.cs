@@ -89,5 +89,42 @@ namespace Checkout_api.UnitTests
             var resultBasket = Assert.IsType<Basket>(result?.Value);
             Assert.Equal(30, resultBasket.Total);
         }
+
+        [Fact]
+        public void Checkout_WithMultipleItems_OkActionResult()
+        {
+            // Arrange
+            itemA.QunatityRequired = 3;
+            itemB.QunatityRequired = 1;
+            Basket basket = new Basket
+            {
+                Items = new List<Item> { itemA, itemB },
+            };
+
+            // Act
+            var result = shoppingBasketController.CheckoutItems(basket) as OkObjectResult;
+
+            // Assert
+            Assert.IsType<OkObjectResult>(result as OkObjectResult);
+        }
+
+        [Fact]
+        public void Checkout_WithThreeItemAOneItemB_BasketTotalOf45()
+        {
+            // Arrange
+            itemA.QunatityRequired = 3;
+            itemB.QunatityRequired = 1;
+            Basket basket = new Basket
+            {
+                Items = new List<Item> { itemA, itemB },
+            };
+
+            // Act
+            var result = shoppingBasketController.CheckoutItems(basket) as OkObjectResult;
+
+            // Assert
+            var resultBasket = Assert.IsType<Basket>(result?.Value);
+            Assert.Equal(45, resultBasket.Total);
+        }
     }
 }
